@@ -4,6 +4,9 @@
 //첨부한 라이브러리 사용해서 새로운 객체 만들어주세요. 이제 app이라고 부를게요
     const app = express();
 
+// bodyParser을 사용한다.
+    app.use(express.urlencoded({extended: true})) 
+
 // .listen() : 내 컴퓨터에서 서버를 열 수 있음(어디에?)
 // .listen(서버띄울 포트번호,  function(){서버 띄우고 실행할 코드})
     app.listen(8080, function(){
@@ -31,6 +34,9 @@
 // POST요청 처리하는 코드
     // app.post('경로', function(요청내용, 응답내용){응답어떻게 할지} )
     app.post('/add', function(요청req, 응답res){
-        응답res.send('전송완료')
+        응답res.send('전송완료');
+        console.log(`제목 : ${요청req.body.title}`);
+        console.log(`날짜 : ${요청req.body.date}`);
+
     });
 
