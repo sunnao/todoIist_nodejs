@@ -89,3 +89,17 @@
         
     });
 
+// /delete에 접속해오면 담겨온 게시물 번호에 따라 DB삭제.
+    app.delete('/delete', (req,res)=>{
+        console.log(req.body); //req.body -- 요청시 보낸 데이더가 담겨있음.
+        // _id는 숫자형이므로 변환필요.
+        req.body._id = Number(req.body._id); //req인것 주의
+        console.log(req.body);
+        // req.body에 담겨온 게시물번호와 일치하는 글을 DB에서 찾아서 삭제
+        db.collection('post').deleteOne(req.body, function(err, 결과){
+            console.log("삭제완료");
+            res.status(200).send({ message : '성공했습니다' });  //요청성공
+            //서버는 꼭 응답을 무언가 보내주어야 한다.
+        });
+    });
+
