@@ -58,9 +58,20 @@
     // app.post('경로', function(요청내용, 응답내용){응답어떻게 할지} )
     app.post('/add', function(요청req, 응답res){
         응답res.send('전송완료');
-        db.collection('post').insertOne({제목 : 요청req.body.title, 날짜 : 요청req.body.dat}, function(err,결과){
-            console.log('저장완료');
-        });
+        // 게시글 번호 고유하게 부여하기
+        db.collection('counter').findOne({name : '게시물갯수'},(err,result)=>{
+            console.log(result.totalPost);
+            let 총게시글수 = result.totalPost;
+
+            db.collection('post').insertOne({_id : 총게시글수+1 ,제목 : 요청req.body.title, 날짜 : 요청req.body.date}, function(err,결과){
+                console.log('저장완료');
+                // counter 콜렉션의 totalPost도 1 증가시켜야함(수정) operater연산자사용
+                db.collection('counter').updateOne({name:'게시물갯수'},{$inc:{totalPost:1}},function(err,result){
+                    if(err) return console.log(err)
+                })
+            });
+        })
+        
         console.log(`제목 : ${요청req.body.title}`);
         console.log(`날짜 : ${요청req.body.date}`);
 
